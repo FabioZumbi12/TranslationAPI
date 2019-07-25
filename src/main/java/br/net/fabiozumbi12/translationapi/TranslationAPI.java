@@ -74,7 +74,7 @@ public final class TranslationAPI extends JavaPlugin {
                 msg = matcher.group(1);
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            getLogger().warning("Error on get language from google: " + ex.getLocalizedMessage());
         }
         return msg;
     }
