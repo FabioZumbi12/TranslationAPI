@@ -13,9 +13,10 @@ public class TranslationFile implements LangDB {
 
     private YamlConfiguration langFile = new YamlConfiguration();
     private File langFileExt;
+
     public TranslationFile(TranslationAPI plugin) {
         try {
-            langFileExt = new File(plugin.getDataFolder(), plugin.getSysLang()+".yml");
+            langFileExt = new File(plugin.getDataFolder(), plugin.getSysLang() + ".yml");
             if (!langFileExt.exists())
                 langFileExt.createNewFile();
 

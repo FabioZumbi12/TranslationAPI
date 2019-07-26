@@ -30,16 +30,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class TranslationAPI extends JavaPlugin implements CommandExecutor, TabCompleter {
+    private static TranslationAPI plugin;
     private LangDB langDB;
     private String sysLanguage;
     private boolean wait = false;
-    public String getSysLang() {
-        return this.sysLanguage;
-    }
 
-    private static TranslationAPI plugin;
     public static TranslationAPI getAPI() {
         return plugin;
+    }
+
+    public String getSysLang() {
+        return this.sysLanguage;
     }
 
     @Override
@@ -68,7 +69,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
             if (args[0].isEmpty()) {
                 tab.addAll(Arrays.asList("reload", "translate-items", "translate-entities"));
             } else {
-                tab.addAll(Stream.of("reload", "translate-items", "translate-entities").filter(t->t.startsWith(args[0])).collect(Collectors.toList()));
+                tab.addAll(Stream.of("reload", "translate-items", "translate-entities").filter(t -> t.startsWith(args[0])).collect(Collectors.toList()));
             }
         }
         return tab;
@@ -77,14 +78,14 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&5[&7TranslationAPI&5]&a " + translateCustomText("TranslationAPI", "Plugin made by FabioZumbi12", "en-us", sysLanguage, true)));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&5[&7TranslationAPI&5]&a " + translateCustomText("TranslationAPI", "Plugin made by FabioZumbi12", "en-us", sysLanguage, true)));
             return true;
         }
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 reload();
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&5[&7TranslationAPI&5]&a " + translateCustomText("TranslationAPI", "Configuration reloaded with success!", "en-us", sysLanguage, true)));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&5[&7TranslationAPI&5]&a " + translateCustomText("TranslationAPI", "Configuration reloaded with success!", "en-us", sysLanguage, true)));
                 return true;
             }
 
@@ -98,7 +99,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&5[&7TranslationAPI&5]&a " + translateCustomText("TranslationAPI", "The translation of all Material Names has been started...", "en-us", sysLanguage, true)));
                 Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
                     final int[] total = {0};
-                    Arrays.stream(Material.values()).forEach(m->{
+                    Arrays.stream(Material.values()).forEach(m -> {
                         String temp = langDB.getItemName(m);
                         if (temp != null) {
                             return;
@@ -124,7 +125,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&5[&7TranslationAPI&5]&a " + translateCustomText("TranslationAPI", "The translation of all Entity Names has been started...", "en-us", sysLanguage, true)));
                 Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
                     final int[] total = {0};
-                    Arrays.stream(EntityType.values()).forEach(e->{
+                    Arrays.stream(EntityType.values()).forEach(e -> {
                         String temp = langDB.getEntityName(e);
                         if (temp != null) {
                             return;
@@ -145,8 +146,8 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
     private void reload() {
         // Get system language
-        String sysLang = (System.getProperty("user.language")+"-"+System.getProperty("user.country")).toLowerCase();
-        sysLanguage = sysLang.equals("-") ? "en-us":sysLang;
+        String sysLang = (System.getProperty("user.language") + "-" + System.getProperty("user.country")).toLowerCase();
+        sysLanguage = sysLang.equals("-") ? "en-us" : sysLang;
 
         // Init config
         getConfig().set("system-language", getConfig().getString("system-language", sysLanguage));
@@ -220,7 +221,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         String temp = langDB.getCustom(category, text);
 
-        if (temp == null){
+        if (temp == null) {
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 langDB.setCustom(category, text, temp);
@@ -246,7 +247,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         String temp = langDB.getText(text);
 
-        if (temp == null){
+        if (temp == null) {
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 langDB.setText(text, temp);
@@ -274,7 +275,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         String temp = langDB.getItemName(material);
 
-        if (temp == null){
+        if (temp == null) {
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 langDB.setItemName(material, capitalizeText(temp));
@@ -303,7 +304,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         String temp = langDB.getEntityName(entityType);
 
-        if (temp == null){
+        if (temp == null) {
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 langDB.setEntityName(entityType, capitalizeText(temp));
