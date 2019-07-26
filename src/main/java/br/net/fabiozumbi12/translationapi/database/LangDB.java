@@ -1,18 +1,21 @@
 package br.net.fabiozumbi12.translationapi.database;
 
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 
 public interface LangDB {
 
-    String get(String language, String key);
-    void set(String language, String key, String translation);
+    String getText(String key);
+    void setText(String key, String translation);
 
-    String getCustom(String category, String language, String key);
-    void setCustom(String category, String language, String key, String translation);
+    String getCustom(String category, String key);
+    void setCustom(String category, String key, String translation);
 
-    String getItemName(String language, Material material);
-    void setItemName(String language, Material material, String translation);
+    String getItemName(Material material);
+    void setItemName(Material material, String translation);
+
+    String getEntityName(EntityType entityType);
+    void setEntityName(EntityType entityType, String translation);
 
     void save();
-    void load();
 }
