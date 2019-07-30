@@ -79,6 +79,11 @@ public class TranslationFile implements LangDB {
         }
     }
 
+    @Override
+    public void closeConn() {
+
+    }
+
     private String fixConfigPath(String text) {
         while (text.endsWith(".")) {
             text = text.substring(0, text.lastIndexOf("."));

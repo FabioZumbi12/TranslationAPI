@@ -22,4 +22,6 @@ public interface LangDB {
     void setEntityName(EntityType entityType, String translation);
 
     void save();
+
+    void closeConn();
 }

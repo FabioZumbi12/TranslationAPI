@@ -152,6 +152,14 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         // Init config
         getConfig().set("system-language", getConfig().getString("system-language", sysLanguage));
         getConfig().set("database", getConfig().getString("database", "file"));
+
+        getConfig().set("mysql.host", getConfig().getString("mysql.host", "localhost"));
+        getConfig().set("mysql.port", getConfig().getString("mysql.port", "3306"));
+        getConfig().set("mysql.database ", getConfig().getString("mysql.database ", "TranslationApi"));
+        getConfig().set("mysql.username", getConfig().getString("mysql.username", "root"));
+        getConfig().set("mysql.password ", getConfig().getString("mysql.password ", "1234"));
+        getConfig().set("mysql.prefix ", getConfig().getString("mysql.prefix ", "langApi_"));
+
         saveConfig();
 
         reloadConfig();
@@ -161,6 +169,12 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         sysLanguage = getConfig().getString("system-language");
         String database = getConfig().getString("database");
+
+        if (langDB != null) {
+            langDB.closeConn();
+            langDB.save();
+        }
+
         if (database.equalsIgnoreCase("mysql")) {
             langDB = new TranslationMYSQL(this);
         } else {
