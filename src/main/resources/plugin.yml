@@ -8,3 +8,4 @@ description: Plugin for realtime general translation
 commands:
   translationapi:
     permission: 'translationapi.command'
+    aliases: trapi
