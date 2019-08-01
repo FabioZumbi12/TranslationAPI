@@ -21,7 +21,7 @@ The source is available on GitHub: https://github.com/FabioZumbi12/TranslationAP
 ```
 <dependencies>  
   <dependency>  
-    <groupId>br.net.fabiozumbi12.TranslationAPI</groupId>  
+    <groupId>br.net.fabiozumbi12</groupId>  
     <artifactId>TranslationAPI</artifactId>  
     <version>LATEST</version>  
     <scope>provided</scope>  
