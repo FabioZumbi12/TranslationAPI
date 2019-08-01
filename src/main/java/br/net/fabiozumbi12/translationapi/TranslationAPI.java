@@ -51,7 +51,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         getCommand("translationapi").setExecutor(this);
 
         // Init vars
-        reload();
+        reload(false);
 
         getLogger().info("TranslationAPI Enabled");
     }
@@ -84,7 +84,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
-                reload();
+                reload(true);
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&5[&7TranslationAPI&5]&a " + translateCustomText("TranslationAPI", "Configuration reloaded with success!", "en-us", sysLanguage, true)));
                 return true;
             }
@@ -144,25 +144,25 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         return false;
     }
 
-    private void reload() {
+    private void reload(boolean reload) {
         // Get system language
         String sysLang = (System.getProperty("user.language") + "-" + System.getProperty("user.country")).toLowerCase();
         sysLanguage = sysLang.equals("-") ? "en-us" : sysLang;
 
         // Init config
+        if (reload) reloadConfig();
+
         getConfig().set("system-language", getConfig().getString("system-language", sysLanguage));
         getConfig().set("database", getConfig().getString("database", "file"));
 
         getConfig().set("mysql.host", getConfig().getString("mysql.host", "localhost"));
         getConfig().set("mysql.port", getConfig().getString("mysql.port", "3306"));
-        getConfig().set("mysql.database ", getConfig().getString("mysql.database ", "TranslationApi"));
+        getConfig().set("mysql.database", getConfig().getString("mysql.database", "TranslationApi"));
         getConfig().set("mysql.username", getConfig().getString("mysql.username", "root"));
-        getConfig().set("mysql.password ", getConfig().getString("mysql.password ", "1234"));
-        getConfig().set("mysql.prefix ", getConfig().getString("mysql.prefix ", "langApi_"));
+        getConfig().set("mysql.password", getConfig().getString("mysql.password", "1234"));
+        getConfig().set("mysql.prefix", getConfig().getString("mysql.prefix", "langApi_"));
 
         saveConfig();
-
-        reloadConfig();
 
         Bukkit.getScheduler().cancelTasks(this);
         wait = false;
@@ -172,7 +172,6 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         if (langDB != null) {
             langDB.closeConn();
-            langDB.save();
         }
 
         if (database.equalsIgnoreCase("mysql")) {
