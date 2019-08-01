@@ -225,6 +225,10 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
     /*
     Translation for custom Texts or Messages like a plugin category or specific messages
      */
+    public String translateCustomText(String category, String text, String from) {
+        return translateCustomText(category, text, from, getSysLang(), false);
+    }
+
     public String translateCustomText(String category, String text, String from, String to) {
         return translateCustomText(category, text, from, to, false);
     }
@@ -251,8 +255,8 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
     /*
     Translation for Text or Messages
      */
-    public String translateText(String text, String from, String to) {
-        return translateText(text, from, to, false);
+    public String translateText(String text, String from, boolean save) {
+        return translateText(text, from, getSysLang(), save);
     }
 
     public String translateText(String text, String from, String to, boolean save) {
@@ -277,8 +281,8 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
     /*
     Translation for Item types
      */
-    public String translateItem(Material material, String from, String to) {
-        return translateItem(material, from, to, false);
+    public String translateItem(Material material, String from, boolean save) {
+        return translateItem(material, from, getSysLang(), save);
     }
 
     public String translateItem(Material material, String from, String to, boolean save) {
@@ -306,8 +310,8 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
     /*
     Translation for Item types
      */
-    public String translateEntity(EntityType entityType, String from, String to) {
-        return translateEntity(entityType, from, to, false);
+    public String translateEntity(EntityType entityType, String from, boolean save) {
+        return translateEntity(entityType, from, getSysLang(), save);
     }
 
     public String translateEntity(EntityType entityType, String from, String to, boolean save) {
