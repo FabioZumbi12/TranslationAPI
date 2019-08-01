@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -183,7 +184,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
     }
 
     public String capitalizeText(String name) {
-        String[] split = name.replace("_", " ").split(" ");
+        String[] split = name.toUpperCase().replace("_", " ").split(" ");
         StringBuilder finalName = new StringBuilder();
         for (String nm : split) {
             finalName.append(nm.toUpperCase(), 0, 1).append(nm.toLowerCase().substring(1)).append(" ");
@@ -191,12 +192,12 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         return finalName.delete(finalName.length() - 1, finalName.length()).toString();
     }
 
-    public String translate(String msg, String languageFrom, String languageTo) {
+    private String translate(String msg, String languageFrom, String languageTo) {
         if (msg.length() <= 1)
             return msg;
 
         try {
-            URL url = new URL(String.format("https://translate.google.com.tr/m?hl=en&sl=%s&tl=%s&ie=UTF-8&prev=_m&q=%s", languageFrom, languageTo, URLEncoder.encode(msg, "UTF-8")));
+            URL url = new URL(String.format(new String(Base64.getDecoder().decode("aHR0cHM6Ly90cmFuc2xhdGUuZ29vZ2xlLmNvbS50ci9tP2hsPWVuJnNsPSVzJnRsPSVzJmllPVVURi04JnByZXY9X20mcT0lcw==")), languageFrom, languageTo, URLEncoder.encode(msg, "UTF-8")));
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
@@ -221,17 +222,27 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         return msg;
     }
 
-    /*
-    Translation for custom Texts or Messages like a plugin category or specific messages
+    /**
+     * Translation for custom Texts or Messages like a plugin or specific messages
+     * @param category The plugin name or category
+     * @param text The text to translate
+     * @param from Translate from (e.g. "en-us")
+     * @param save Save translation on Database
+     * @return Translated text
      */
-    public String translateCustomText(String category, String text, String from) {
-        return translateCustomText(category, text, from, getSysLang(), false);
+    public String translateCustomText(String category, String text, String from, boolean save) {
+        return translateCustomText(category, text, from, getSysLang(), save);
     }
 
-    public String translateCustomText(String category, String text, String from, String to) {
-        return translateCustomText(category, text, from, to, false);
-    }
-
+    /**
+     * Translation for custom Texts or Messages like a plugin or specific messages
+     * @param category The plugin name or category
+     * @param text The text to translate
+     * @param from Translate from (e.g. "en-us")
+     * @param to Translate to (e.g. "pt-br")
+     * @param save Save translation on Database
+     * @return Translated text
+     */
     public String translateCustomText(String category, String text, String from, String to, boolean save) {
         if (from.equals(to))
             return text;
@@ -251,13 +262,25 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         return text;
     }
 
-    /*
-    Translation for Text or Messages
+    /**
+     * Translate some text
+     * @param text The text to translate
+     * @param from Translate from (e.g. "en-us")
+     * @param save Save translation on Database
+     * @return Translated text
      */
     public String translateText(String text, String from, boolean save) {
         return translateText(text, from, getSysLang(), save);
     }
 
+    /**
+     * Translate some text
+     * @param text The text to translate
+     * @param from Translate from (e.g. "en-us")
+     * @param to Translate to (e.g. "pt-br")
+     * @param save Save translation on Database
+     * @return Translated text
+     */
     public String translateText(String text, String from, String to, boolean save) {
         if (from.equals(to))
             return text;
@@ -277,13 +300,25 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         return text;
     }
 
-    /*
-    Translation for Item types
+    /**
+     * Translate material name
+     * @param material The Material
+     * @param from Translate from (e.g. "en-us")
+     * @param save Save translation on Database
+     * @return Translated text
      */
     public String translateItem(Material material, String from, boolean save) {
         return translateItem(material, from, getSysLang(), save);
     }
 
+    /**
+     * Translate material name
+     * @param material The Material
+     * @param from Translate from (e.g. "en-us")
+     * @param to Translate to (e.g. "pt-br")
+     * @param save Save translation on Database
+     * @return Translated text
+     */
     public String translateItem(Material material, String from, String to, boolean save) {
         String text = capitalizeText(material.name());
 
@@ -305,14 +340,25 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         return text;
     }
 
-
-    /*
-    Translation for Item types
+    /**
+     * Translate entity types
+     * @param entityType The entity type
+     * @param from Translate from (e.g. "en-us")
+     * @param save Save translation on Database
+     * @return Translated text
      */
     public String translateEntity(EntityType entityType, String from, boolean save) {
         return translateEntity(entityType, from, getSysLang(), save);
     }
 
+    /**
+     * Translate entity types
+     * @param entityType The entity type
+     * @param from Translate from (e.g. "en-us")
+     * @param to Translate to (e.g. "pt-br")
+     * @param save Save translation on Database
+     * @return Translated text
+     */
     public String translateEntity(EntityType entityType, String from, String to, boolean save) {
         String text = capitalizeText(entityType.name());
 
@@ -325,6 +371,46 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 langDB.setEntityName(entityType, capitalizeText(temp));
+            }
+        }
+
+        if (!temp.isEmpty()) {
+            text = temp;
+        }
+        return text;
+    }
+
+    /**
+     * Translate some custom type, normally separated with _ (underline)
+     * @param typeName The custom type name
+     * @param from Translate from (e.g. "en-us")
+     * @param save Save translation on Database
+     * @return Translated text
+     */
+    public String translateCustomType(String typeName, String from, boolean save) {
+        return translateCustomType(typeName, from, getSysLang(), save);
+    }
+
+    /**
+     * Translate some custom type, normally separated with _ (underline)
+     * @param typeName The custom type name
+     * @param from Translate from (e.g. "en-us")
+     * @param to Translate to (e.g. "pt-br")
+     * @param save Save translation on Database
+     * @return Translated text
+     */
+    public String translateCustomType(String typeName, String from, String to, boolean save) {
+        String text = capitalizeText(typeName);
+
+        if (from.equals(to))
+            return text;
+
+        String temp = langDB.getCustomType(typeName);
+
+        if (temp == null) {
+            temp = translate(text, from, to);
+            if (!temp.isEmpty() && !text.equals(temp) && save) {
+                langDB.setCustomType(typeName, capitalizeText(temp));
             }
         }
 

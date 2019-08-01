@@ -21,6 +21,10 @@ public interface LangDB {
 
     void setEntityName(EntityType entityType, String translation);
 
+    String getCustomType(String typeName);
+
+    void setCustomType(String typeName, String translation);
+
     void save();
 
     void closeConn();

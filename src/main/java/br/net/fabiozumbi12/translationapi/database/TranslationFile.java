@@ -71,6 +71,17 @@ public class TranslationFile implements LangDB {
     }
 
     @Override
+    public String getCustomType(String typeName) {
+        return langFile.getString("customType." + typeName);
+    }
+
+    @Override
+    public void setCustomType(String typeName, String translation) {
+        langFile.set("customType." + typeName, translation);
+        save();
+    }
+
+    @Override
     public void save() {
         try {
             langFile.save(langFileExt);

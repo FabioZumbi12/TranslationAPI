@@ -94,6 +94,22 @@ public class TranslationMYSQL implements LangDB {
                 st.executeUpdate();
             }
             rs.close();
+
+            // Custom Type
+            rs = meta.getTables(null, null, prefix + "customType", null);
+            if (!rs.next()) {
+                PreparedStatement ps = connection.prepareStatement("CREATE TABLE `" + prefix + "customType` " +
+                        "(`en-us` varchar(100) PRIMARY KEY NOT NULL, `"+plugin.getSysLang()+"` varchar(100)) CHARACTER SET utf8 COLLATE utf8_general_ci");
+                ps.executeUpdate();
+                ps.close();
+            }
+            rs.close();
+            rs = meta.getColumns(null, null, prefix + "customType", plugin.getSysLang());
+            if (!rs.next()) {
+                PreparedStatement st = connection.prepareStatement("ALTER TABLE `" + prefix + "customType" + "` ADD `"+plugin.getSysLang()+"` varchar(100)");
+                st.executeUpdate();
+            }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -297,6 +313,49 @@ public class TranslationMYSQL implements LangDB {
                     ps.setString(1, "en-us");
                     ps.setString(2, plugin.getSysLang());
                     ps.setString(3, entityType.name());
+                    ps.setString(4, translation);
+                    ps.executeUpdate();
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        r.runTaskAsynchronously(plugin);
+    }
+
+    @Override
+    public String getCustomType(String key) {
+        if (cache.containsKey("customType_"+key)) {
+            return cache.get("customType_"+key);
+        }
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT `" + plugin.getSysLang() + "` from `" + prefix + "customType` where `en-us` = ?");
+            ps.setString(1, key);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String value = rs.getString(plugin.getSysLang());
+                rs.close();
+                addCache("customType_"+key, value);
+                return value;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void setCustomType(String key, String translation) {
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "customType` (?,?) VALUES (?,?)");
+                    ps.setString(1, "en-us");
+                    ps.setString(2, plugin.getSysLang());
+                    ps.setString(3, key);
                     ps.setString(4, translation);
                     ps.executeUpdate();
                     ps.close();
