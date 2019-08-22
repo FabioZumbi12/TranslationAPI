@@ -3,6 +3,7 @@ package br.net.fabiozumbi12.translationapi;
 import br.net.fabiozumbi12.translationapi.database.LangDB;
 import br.net.fabiozumbi12.translationapi.database.TranslationFile;
 import br.net.fabiozumbi12.translationapi.database.TranslationMYSQL;
+import br.net.fabiozumbi12.translationapi.metrics.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -42,6 +43,16 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         reload(false);
 
         getLogger().info("TranslationAPI Enabled");
+
+        // Metrics
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.addCustomChart(new Metrics.SimplePie("translating_to", () -> sysLanguage));
+            if (metrics.isEnabled())
+                getLogger().info("Metrics enabled! See our stats here: https://bstats.org/plugin/bukkit/TranslationAPI");
+        } catch (Exception ex) {
+            getLogger().info("Metrics not enabled due errors: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
