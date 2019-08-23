@@ -14,6 +14,9 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -167,6 +170,13 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
         wait = false;
 
         sysLanguage = getConfig().getString("system-language");
+        if (!new File(getDataFolder(), sysLanguage + ".yml").exists() && getResource("presets/" + sysLanguage + ".yml") != null){
+            saveResource("presets/" + sysLanguage + ".yml", false);
+            try {
+                Files.copy(new File(getDataFolder(), "presets" + File.separator + sysLanguage + ".yml").toPath(), new File(getDataFolder(), sysLanguage + ".yml").toPath());
+            } catch (IOException ignored) {}
+        }
+
         String database = getConfig().getString("database");
 
         if (langDB != null) {
