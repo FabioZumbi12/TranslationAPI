@@ -175,6 +175,7 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setText(String key, String translation) {
+        addCache("text_"+key, translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
@@ -218,6 +219,7 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setCustom(String category, String key, String translation) {
+        addCache("custom_"+category+key, translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
@@ -262,6 +264,7 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setItemName(Material material, String translation) {
+        addCache("item_"+material.name(), translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
@@ -305,6 +308,7 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setEntityName(EntityType entityType, String translation) {
+        addCache("entity_"+entityType.name(), translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
@@ -348,6 +352,7 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setCustomType(String key, String translation) {
+        addCache("customType_"+key, translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
@@ -368,9 +373,7 @@ public class TranslationMYSQL implements LangDB {
     }
 
     @Override
-    public void save() {
-
-    }
+    public void save() {}
 
     @Override
     public void closeConn() {
