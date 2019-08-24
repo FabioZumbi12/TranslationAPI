@@ -8,7 +8,7 @@ The source is available on GitHub: https://github.com/FabioZumbi12/TranslationAP
 
 ## Maven repository:
 **Repository:**  
-```
+```xml
 <repositories>  
   <repository>  
     <id>TranslationAPI-repo</id>  
@@ -18,7 +18,7 @@ The source is available on GitHub: https://github.com/FabioZumbi12/TranslationAP
 ```
 
 **Dependency:**  
-```
+```xml
 <dependencies>  
   <dependency>  
     <groupId>br.net.fabiozumbi12</groupId>  
@@ -28,3 +28,6 @@ The source is available on GitHub: https://github.com/FabioZumbi12/TranslationAP
   </dependency>   
 </dependencies> 
 ```
+## WIKI and usage:
+
+Click here to go to wiki and see the methods and usage examples: [WIKI](https://github.com/FabioZumbi12/TranslationAPI/wiki)
