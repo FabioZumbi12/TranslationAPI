@@ -180,11 +180,9 @@ public class TranslationMYSQL implements LangDB {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "text` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, key);
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "text` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, key);
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -202,6 +200,7 @@ public class TranslationMYSQL implements LangDB {
         }
 
         try {
+            createCustomTable(category);
             PreparedStatement ps = connection.prepareStatement("SELECT `" + plugin.getSysLang() + "` from `" + prefix + "custom_" + category + "` where `en-us` = ?");
             ps.setString(1, key);
             ResultSet rs = ps.executeQuery();
@@ -225,11 +224,9 @@ public class TranslationMYSQL implements LangDB {
             public void run() {
                 createCustomTable(category);
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "custom_" + category + "` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, key);
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "custom_" + category + "` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, key);
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -269,11 +266,9 @@ public class TranslationMYSQL implements LangDB {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "items` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, material.name());
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "items` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, material.name());
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -313,11 +308,9 @@ public class TranslationMYSQL implements LangDB {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "entities` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, entityType.name());
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "entities` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, entityType.name());
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -357,11 +350,9 @@ public class TranslationMYSQL implements LangDB {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "customType` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, key);
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "customType` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, key);
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
