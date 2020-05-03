@@ -1,7 +1,7 @@
 Plugin for realtime item, entity, chat and custom translations.
 
 ## Dev builds: 
-Available on jenkins: [![Build Status](http://host.areaz12server.net.br:8080/buildStatus/icon?job=TranslationAPI)](http://host.areaz12server.net.br:8080/job/TranslationAPI/)
+Available on jenkins: [![Build Status](http://host.areaz12server.net.br:8081/buildStatus/icon?job=TranslationAPI)](http://host.areaz12server.net.br:8081/job/TranslationAPI/)
 
 ## Source:
 The source is available on GitHub: https://github.com/FabioZumbi12/TranslationAPI
