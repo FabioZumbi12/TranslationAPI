@@ -90,6 +90,9 @@ public class TranslationCore {
         String temp = plugin.langDB.getCustom(category, text);
 
         if (temp == null) {
+            if (!plugin.getConfig().getBoolean("online-translation"))
+                return text;
+
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 plugin.langDB.setCustom(category, text, temp);
@@ -128,6 +131,9 @@ public class TranslationCore {
         String temp = plugin.langDB.getText(text);
 
         if (temp == null) {
+            if (!plugin.getConfig().getBoolean("online-translation"))
+                return text;
+
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 plugin.langDB.setText(text, temp);
@@ -168,6 +174,9 @@ public class TranslationCore {
         String temp = plugin.langDB.getItemName(material);
 
         if (temp == null) {
+            if (!plugin.getConfig().getBoolean("online-translation"))
+                return text;
+
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 plugin.langDB.setItemName(material, capitalizeText(temp));
@@ -208,6 +217,9 @@ public class TranslationCore {
         String temp = plugin.langDB.getEntityName(entityType);
 
         if (temp == null) {
+            if (!plugin.getConfig().getBoolean("online-translation"))
+                return text;
+
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 plugin.langDB.setEntityName(entityType, capitalizeText(temp));
@@ -248,6 +260,9 @@ public class TranslationCore {
         String temp = plugin.langDB.getCustomType(typeName);
 
         if (temp == null) {
+            if (!plugin.getConfig().getBoolean("online-translation"))
+                return text;
+
             temp = translate(text, from, to);
             if (!temp.isEmpty() && !text.equals(temp) && save) {
                 plugin.langDB.setCustomType(typeName, capitalizeText(temp));

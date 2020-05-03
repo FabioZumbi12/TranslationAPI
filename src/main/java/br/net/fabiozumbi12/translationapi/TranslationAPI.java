@@ -156,6 +156,7 @@ public final class TranslationAPI extends JavaPlugin implements CommandExecutor,
 
         getConfig().set("system-language", getConfig().getString("system-language", sysLanguage));
         getConfig().set("database", getConfig().getString("database", "file"));
+        getConfig().set("online-translation", getConfig().getBoolean("online-translation", true));
 
         getConfig().set("mysql.host", getConfig().getString("mysql.host", "localhost"));
         getConfig().set("mysql.port", getConfig().getString("mysql.port", "3306"));
