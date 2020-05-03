@@ -83,14 +83,14 @@ public class TranslationMYSQL implements LangDB {
             rs = meta.getTables(null, null, prefix + "text", null);
             if (!rs.next()) {
                 PreparedStatement ps = connection.prepareStatement("CREATE TABLE `" + prefix + "text` " +
-                        "(`en-us` LONGTEXT PRIMARY KEY NOT NULL, `"+plugin.getSysLang()+"` LONGTEXT) CHARACTER SET utf8 COLLATE utf8_general_ci");
+                        "(`en-us` varchar(256) PRIMARY KEY NOT NULL, `"+plugin.getSysLang()+"` varchar(256)) CHARACTER SET utf8 COLLATE utf8_general_ci");
                 ps.executeUpdate();
                 ps.close();
             }
             rs.close();
             rs = meta.getColumns(null, null, prefix + "text", plugin.getSysLang());
             if (!rs.next()) {
-                PreparedStatement st = connection.prepareStatement("ALTER TABLE `" + prefix + "text" + "` ADD `"+plugin.getSysLang()+"` LONGTEXT");
+                PreparedStatement st = connection.prepareStatement("ALTER TABLE `" + prefix + "text" + "` ADD `"+plugin.getSysLang()+"` varchar(256)");
                 st.executeUpdate();
             }
             rs.close();
@@ -122,14 +122,14 @@ public class TranslationMYSQL implements LangDB {
             ResultSet rs = meta.getTables(null, null, prefix + "custom_" + table, null);
             if (!rs.next()) {
                 PreparedStatement ps = connection.prepareStatement("CREATE TABLE `" + prefix + "custom_" + table + "` " +
-                        "(`en-us` LONGTEXT PRIMARY KEY NOT NULL, `"+plugin.getSysLang()+"` LONGTEXT) CHARACTER SET utf8 COLLATE utf8_general_ci");
+                        "(`en-us` varchar(256) PRIMARY KEY NOT NULL, `"+plugin.getSysLang()+"` varchar(256)) CHARACTER SET utf8 COLLATE utf8_general_ci");
                 ps.executeUpdate();
                 ps.close();
             }
             rs.close();
             rs = meta.getColumns(null, null, prefix + "custom_" + table, plugin.getSysLang());
             if (!rs.next()) {
-                PreparedStatement st = connection.prepareStatement("ALTER TABLE `" + prefix + "custom_" + table + "` ADD `"+plugin.getSysLang()+"` LONGTEXT");
+                PreparedStatement st = connection.prepareStatement("ALTER TABLE `" + prefix + "custom_" + table + "` ADD `"+plugin.getSysLang()+"` varchar(256)");
                 st.executeUpdate();
             }
             rs.close();
@@ -175,15 +175,14 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setText(String key, String translation) {
+        addCache("text_"+key, translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "text` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, key);
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "text` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, key);
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -201,6 +200,7 @@ public class TranslationMYSQL implements LangDB {
         }
 
         try {
+            createCustomTable(category);
             PreparedStatement ps = connection.prepareStatement("SELECT `" + plugin.getSysLang() + "` from `" + prefix + "custom_" + category + "` where `en-us` = ?");
             ps.setString(1, key);
             ResultSet rs = ps.executeQuery();
@@ -218,16 +218,15 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setCustom(String category, String key, String translation) {
+        addCache("custom_"+category+key, translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
                 createCustomTable(category);
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "custom_" + category + "` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, key);
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "custom_" + category + "` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, key);
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -262,15 +261,14 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setItemName(Material material, String translation) {
+        addCache("item_"+material.name(), translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "items` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, material.name());
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "items` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, material.name());
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -305,15 +303,14 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setEntityName(EntityType entityType, String translation) {
+        addCache("entity_"+entityType.name(), translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "entities` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, entityType.name());
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "entities` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, entityType.name());
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -348,15 +345,14 @@ public class TranslationMYSQL implements LangDB {
 
     @Override
     public void setCustomType(String key, String translation) {
+        addCache("customType_"+key, translation);
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "customType` (?,?) VALUES (?,?)");
-                    ps.setString(1, "en-us");
-                    ps.setString(2, plugin.getSysLang());
-                    ps.setString(3, key);
-                    ps.setString(4, translation);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + prefix + "customType` (`en-us`,`"+plugin.getSysLang()+"`) VALUES (?,?)");
+                    ps.setString(1, key);
+                    ps.setString(2, translation);
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
@@ -368,9 +364,7 @@ public class TranslationMYSQL implements LangDB {
     }
 
     @Override
-    public void save() {
-
-    }
+    public void save() {}
 
     @Override
     public void closeConn() {
