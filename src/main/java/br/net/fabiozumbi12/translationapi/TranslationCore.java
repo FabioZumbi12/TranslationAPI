@@ -1,6 +1,6 @@
 package br.net.fabiozumbi12.translationapi;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import com.google.common.html.HtmlEscapers;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TranslationCore {
-    private TranslationAPI plugin;
+    private final TranslationAPI plugin;
 
     public TranslationCore(TranslationAPI plugin) {
         this.plugin = plugin;
@@ -44,7 +44,7 @@ public class TranslationCore {
             final Pattern pattern = Pattern.compile("<div dir=\"ltr\" class=\"t0\">(.+?)</div>", Pattern.DOTALL);
             final Matcher matcher = pattern.matcher(str);
             if (matcher.find()) {
-                msg = StringEscapeUtils.unescapeHtml(matcher.group(1));
+                msg = HtmlEscapers.htmlEscaper().escape(matcher.group(1));
             }
         } catch (IOException ex) {
             plugin.getLogger().warning("Error on getText language from google: " + ex.getLocalizedMessage());

@@ -4,7 +4,7 @@ main: br.net.fabiozumbi12.translationapi.TranslationAPI
 api-version: 1.13
 load: STARTUP
 authors: [FabioZumbi12]
-description: Plugin for realtime general translation
+description: ${project.description}
 commands:
   translationapi:
     permission: 'translationapi.command'

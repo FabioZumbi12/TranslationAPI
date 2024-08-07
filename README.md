@@ -6,28 +6,41 @@ Available on jenkins: [![Build Status](http://host.areaz12server.net.br:8081/bui
 ## Source:
 The source is available on GitHub: https://github.com/FabioZumbi12/TranslationAPI
 
-## Maven repository:
+## API repository:
+
 **Repository:**  
+TranslationAPI is hosted on Maven Central
+### Maven
 ```xml
-<repositories>  
-  <repository>  
-    <id>TranslationAPI-repo</id>  
-    <url>https://raw.githubusercontent.com/FabioZumbi12/TranslationAPI/mvn-repo/</url>  
-  </repository>  
-</repositories>  
+<dependencies>
+    <dependency>
+        <groupId>io.github.fabiozumbi12</groupId>
+        <artifactId>TranslationAPI</artifactId>
+        <version>1.2</version>
+    </dependency>
+
+    <!-- Import Javadocs -->
+    <dependency>
+        <groupId>io.github.fabiozumbi12</groupId>
+        <artifactId>TranslationAPI</artifactId>
+        <version>1.2</version>
+        <classifier>javadoc</classifier>
+    </dependency> 
+</dependencies>  
 ```
 
-**Dependency:**  
-```xml
-<dependencies>  
-  <dependency>  
-    <groupId>br.net.fabiozumbi12</groupId>  
-    <artifactId>TranslationAPI</artifactId>  
-    <version>LATEST</version>  
-    <scope>provided</scope>  
-  </dependency>   
-</dependencies> 
+### Gradle:
 ```
+repositories {
+    mavenCentral()
+    maven { url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/' } // Only for snapshots
+}
+
+dependencies {
+    compileOnly ("io.github.fabiozumbi12:TranslationAPI:1.2")
+}
+```
+
 ## WIKI and usage:
 
 Click here to go to wiki and see the methods and usage examples: [WIKI](https://github.com/FabioZumbi12/TranslationAPI/wiki)

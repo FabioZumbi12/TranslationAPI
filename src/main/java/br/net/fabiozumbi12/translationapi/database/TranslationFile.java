@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class TranslationFile implements LangDB {
 
-    private YamlConfiguration langFile = new YamlConfiguration();
+    private final YamlConfiguration langFile = new YamlConfiguration();
     private File langFileExt;
 
     public TranslationFile(TranslationAPI plugin) {
